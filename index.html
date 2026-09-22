@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>शिक्षा साथी - मास्टर एक्सेस पोर्टल</title>
+    <title>शिक्षा साथी - मास्टर एडमिन कन्ट्रोल पोर्टल</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -12,223 +12,200 @@
             font-family: 'Mukta', sans-serif;
             background-color: #f4f6f9;
         }
+        /* Portal iframe area */
+        .portal-frame {
+            width: 100%;
+            height: calc(100vh - 220px);
+            border: none;
+            display: none;
+        }
+        .portal-frame.active {
+            display: block;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between text-slate-800">
+<body class="min-h-screen flex flex-col justify-between text-slate-800 overflow-x-hidden">
 
-    <div class="bg-red-700 text-white text-xs py-1 px-4 flex justify-between items-center border-b-2 border-yellow-400">
+    <!-- Top Alert Bar -->
+    <div class="bg-red-700 text-white text-xs py-1 px-4 flex justify-between items-center border-b-2 border-yellow-400 z-50">
         <div class="flex items-center gap-2">
             <i class="fa-solid fa-flag"></i>
-            <span> | शिक्षा साथी मास्टर पोर्टल</span>
+            <span> | शिक्षा साथी मास्टर एडमिन पोर्टल</span>
         </div>
-        <div>
+        <div class="flex items-center gap-3">
+            <span class="bg-yellow-400 text-slate-900 px-2 py-0.5 rounded font-bold text-[10px]">ADMIN PANEL MODE</span>
             <span>shikhsyasathi</span>
         </div>
     </div>
 
-    <header class="bg-white shadow-md border-b-4 border-red-700">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+    <!-- HEADER / TOP CONTROL PANEL (WITH ALL PORTAL BUTTONS) -->
+    <header class="bg-white shadow-md border-b-4 border-red-700 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
             
-            <div class="flex items-center gap-4 text-center md:text-left">
-                <div class="text-red-700 text-5xl">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showHome()">
+                <div class="text-red-700 text-3xl">
                     <i class="fa-solid fa-landmark-dome"></i>
                 </div>
                 <div>
-                    <h3 class="text-red-700 font-bold text-sm tracking-wide">आजको आवश्यकता प्रविधियुक्त गुणस्तरीय शिक्षा</h3>
-                    <h1 class="text-2xl md:text-3xl font-extrabold text-blue-900 leading-tight">शिक्षा साथी (Shikshya Sathi)</h1>
-                    <p class="text-xs text-slate-500 font-semibold">केन्द्रीय डेटाबेस तथा अनलाइन व्यवस्थापन प्रणाली</p>
+                    <h3 class="text-red-700 font-bold text-[11px] tracking-wide">आजको आवश्यकता प्रविधियुक्त गुणस्तरीय शिक्षा</h3>
+                    <h1 class="text-lg md:text-xl font-extrabold text-blue-900 leading-tight">शिक्षा साथी (Shikshya Sathi)</h1>
                 </div>
             </div>
 
-            <div class="hidden md:flex items-center gap-3 bg-red-50 p-2 rounded border border-red-200">
-                <i class="fa-solid fa-shield-halved text-red-600 text-3xl"></i>
-                <div class="text-xs text-red-900">
-                    <span class="font-bold block">सुरक्षित पहुँच</span>
-                    <span>Master Access Control</span>
+            <!-- Global Action Controls -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <button onclick="showHome()" class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow">
+                    <i class="fa-solid fa-house"></i> गृहपृष्ठ
+                </button>
+                <div id="activePortalIndicator" class="hidden items-center gap-2 bg-red-100 text-red-800 px-3 py-1.5 rounded text-xs font-bold border border-red-300">
+                    <i class="fa-solid fa-circle-dot text-red-600 animate-pulse"></i> 
+                    <span id="currentPortalName"></span>
                 </div>
+                <button onclick="toggleFullScreen()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow" title="Full Screen">
+                    <i class="fa-solid fa-expand"></i> फुल स्क्रिन
+                </button>
             </div>
 
         </div>
-        
-        <nav class="bg-blue-900 text-white text-sm font-semibold">
-            <div class="max-w-6xl mx-auto px-4 flex items-center gap-6 overflow-x-auto py-2.5">
-                <a href="#" class="hover:text-yellow-300 transition flex items-center gap-1"><i class="fa-solid fa-house text-xs"></i> गृहपृष्ठ</a>
-                <span class="text-blue-700">|</span>
-                <a href="#" class="hover:text-yellow-300 transition">पोर्टल सूची</a>
-                <span class="text-blue-700">|</span>
-                <a href="#" class="hover:text-yellow-300 transition">डाटा डाउनलोड</a>
-                <span class="text-blue-700">|</span>
-                <a href="#" class="hover:text-yellow-300 transition">सम्पर्क</a>
+
+        <!-- ADMIN CONTROL PANEL TOP DIV (पोर्टलहरूको सूची माथि नै राखिएको छ) -->
+        <div class="bg-blue-900 text-white py-2 px-4 shadow-inner">
+            <div class="max-w-7xl mx-auto flex items-center gap-3 overflow-x-auto py-1 scrollbar-thin">
+                <span class="text-xs font-bold bg-red-700 text-white px-2 py-1 rounded whitespace-nowrap"><i class="fa-solid fa-cubes"></i> कन्ट्रोल प्यानल:</span>
+                
+                <!-- 1. मुख्य वेबसाइट -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Final/', 'मुख्य वेबसाइट')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-globe text-yellow-300"></i> मुख्य वेबसाइट
+                </button>
+                <!-- 2. शिक्षक PDF पोर्टल -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Docdarta/', 'शिक्षक PDF पोर्टल')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-file-pdf text-yellow-300"></i> शिक्षक PDF
+                </button>
+                <!-- 3. रिक्ति सूचना -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Vacancy/', 'रिक्ति सूचना')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-bullhorn text-yellow-300"></i> रिक्ति सूचना
+                </button>
+                <!-- 4. अभिभावक जानकारी -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Parents-info/', 'अभिभावक जानकारी')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-users text-yellow-300"></i> अभिभावक जानकारी
+                </button>
+                <!-- 5. तलब तथा समय -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Parents-data-long/', 'तलब तथा समय')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-money-check-dollar text-yellow-300"></i> तलब तथा समय
+                </button>
+                <!-- 6. शिक्षक खोज -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Teacher-finder/', 'शिक्षक खोज')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-magnifying-glass text-yellow-300"></i> शिक्षक खोज
+                </button>
+                <!-- 7. भ्याकेन्सी दर्ता -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Vacancydarta1/', 'भ्याकेन्सी दर्ता')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-file-signature text-yellow-300"></i> भ्याकेन्सी दर्ता
+                </button>
+                <!-- 8. परीक्षा नतिजा -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Result/', 'परीक्षा नतिजा')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-square-poll-vertical text-yellow-300"></i> परीक्षा नतिजा
+                </button>
+                <!-- 9. कारोबार पोर्टल -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Karobar/', 'कारोबार पोर्टल')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-briefcase text-yellow-300"></i> कारोबार पोर्टल
+                </button>
+                <!-- 10. शिक्षक नक्सा दर्ता (पूर्ण) -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Dartavoucher/', 'शिक्षक नक्सा दर्ता (पूर्ण)')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-map-location-dot text-yellow-300"></i> शिक्षक नक्सा दर्ता
+                </button>
+                <!-- 11. शिक्षक विवरण नक्सा -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Mapteacher/', 'शिक्षक विवरण नक्सा')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-map text-yellow-300"></i> शिक्षक विवरण नक्सा
+                </button>
+                <!-- 12. मास्टर शिक्षक दर्ता -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Dartamapshort/', 'मास्टर शिक्षक दर्ता')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-id-card-clip text-yellow-300"></i> मास्टर शिक्षक दर्ता
+                </button>
+                <!-- 13. स्वीकृत पोर्टल -->
+                <button onclick="openPortal('https://sikshashathi-lgtm.github.io/Approved/', 'स्वीकृत पोर्टल')" class="bg-blue-800 hover:bg-red-700 text-xs px-3 py-1.5 rounded whitespace-nowrap transition flex items-center gap-1.5 font-semibold">
+                    <i class="fa-solid fa-clipboard-check text-yellow-300"></i> स्वीकृत पोर्टल
+                </button>
+
             </div>
-        </nav>
+        </div>
     </header>
 
-    <div class="bg-yellow-100 border-b border-yellow-300 text-amber-900 text-sm py-2 px-4">
-        <div class="max-w-6xl mx-auto flex items-center gap-2">
-            <span class="bg-red-700 text-white text-xs font-bold px-2 py-0.5 rounded">सूचना:</span>
-            <marquee class="font-semibold">शिक्षा साथीको आधिकारिक मास्टर पोर्टलमा स्वागत छ। तल दिइएका बटनहरूमा क्लिक गरी सम्बन्धित प्रणालीमा जानुहोस्।</marquee>
-        </div>
-    </div>
-
-    <main class="max-w-6xl mx-auto px-4 py-8 w-full">
+    <!-- Main Dynamic Viewer Area -->
+    <main id="mainContentArea" class="flex-grow w-full">
         
-        <div class="border-b-2 border-red-700 mb-6 pb-2 flex justify-between items-end">
-            <h2 class="text-xl font-bold text-blue-900 flex items-center gap-2">
-                <i class="fa-solid fa-cubes text-red-700"></i> प्रणाली/सेवाहरूको सूची
-            </h2>
-            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded border border-blue-300 font-bold">जम्मा: १४ वटा पोर्टल</span>
+        <!-- Default Home Dashboard (Grid View) -->
+        <div id="homeDashboard" class="max-w-7xl mx-auto px-4 py-8 w-full">
+            <div class="border-b-2 border-red-700 mb-6 pb-2 flex justify-between items-end">
+                <h2 class="text-xl font-bold text-blue-900 flex items-center gap-2">
+                    <i class="fa-solid fa-cubes text-red-700"></i> मास्टर एडमिन कन्ट्रोल प्यानल
+                </h2>
+                <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded border border-blue-300 font-bold">माथिको मेनुबाट जुनसुकै पोर्टल चलाउनुहोस्</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center py-16">
+                <div class="text-red-700 text-5xl mb-4">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <h3 class="text-xl font-bold text-blue-900 mb-2">माथिको नेभिगेसन कन्ट्रोल डिभ (Top Div) बाट पोर्टल छान्नुहोस्</h3>
+                <p class="text-sm text-slate-500 max-w-md mx-auto">तपाईंले माथि निलो रङको पट्टीमा देखिरहनुभएको बटनहरूमा क्लिक गरेर एउटै स्क्रिनबाट स्मूथ तरिकाले सबै पोर्टलहरू फुल-स्क्रिनमा चलाउन सक्नुहुन्छ।</p>
+            </div>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-            
-            <a href="https://sikshashathi-lgtm.github.io/Final/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-globe text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">मुख्य वेबसाइट</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
+        <!-- Dynamic Iframe Viewer -->
+        <iframe id="activePortalFrame" class="portal-frame" src=""></iframe>
 
-            <a href="https://sikshashathi-lgtm.github.io/Docdarta/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-file-pdf text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">शिक्षक PDF पोर्टल</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Vacancy/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-bullhorn text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">रिक्ति सूचना</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Parents-info/-/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-users text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">अभिभावक जानकारी</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    डाउनलोड <i class="fa-solid fa-download text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Parents-data-long/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-money-check-dollar text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">तलब तथा समय</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Teacher-finder/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-magnifying-glass text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">शिक्षक खोज</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Vacancydarta1/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-file-signature text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">भ्याकेन्सी दर्ता</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Result/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-square-poll-vertical text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">परीक्षा नतिजा</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Karobar/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-briefcase text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">कारोबार पोर्टल</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Dartavoucher/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-map-location-dot text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">शिक्षक नक्सा दर्ता (पूर्ण)</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Mapteacher/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-map text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">शिक्षक विवरण नक्सा</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Dartamapshort/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-id-card-clip text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">मास्टर शिक्षक दर्ता</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="https://sikshashathi-lgtm.github.io/Approved/" target="_blank" class="group bg-white rounded-xl border-2 border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square">
-                <div class="w-16 h-16 rounded-full bg-blue-50 group-hover:bg-red-700 text-blue-900 group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 shadow-sm">
-                    <i class="fa-solid fa-clipboard-check text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-slate-800 group-hover:text-red-700 text-sm md:text-base leading-snug">स्वीकृत पोर्टल</span>
-                <span class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 group-hover:text-red-600">
-                    खोल्नुहोस् <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                </span>
-            </a>
-
-            <a href="javascript:void(0)" onclick="alert('नयाँ पोर्टल थप्न व्यवस्थापकलाई सम्पर्क गर्नुहोस्।')" class="group bg-red-50/60 hover:bg-red-100/80 rounded-xl border-2 border-dashed border-red-300 hover:border-red-600 transition-all duration-200 p-5 flex flex-col items-center justify-center text-center aspect-square cursor-pointer">
-                <div class="w-16 h-16 rounded-full bg-red-700 text-white flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200 shadow-md">
-                    <i class="fa-solid fa-plus text-2xl"></i>
-                </div>
-                <span class="font-extrabold text-red-900 text-sm md:text-base leading-snug">नयाँ सेवा थप्नुहोस्</span>
-                <span class="text-[11px] text-red-600 mt-1">Direct Link</span>
-            </a>
-
-        </div>
     </main>
 
-    <footer class="bg-blue-950 text-white border-t-4 border-red-700 mt-12">
-        <div class="max-w-6xl mx-auto px-4 py-6 text-center text-xs space-y-2">
-            <p class="font-bold text-yellow-400">शिक्षा साथी - एकीकृत व्यवस्थापन प्रणाली</p>
+    <!-- Footer -->
+    <footer class="bg-blue-950 text-white border-t-4 border-red-700 py-3 z-30">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-1">
+            <p class="font-bold text-yellow-400">शिक्षा साथी - एकीकृत व्यवस्थापन प्रणाली (Top Admin Bar Control)</p>
             <p class="text-slate-300">© २०८२ शिक्षा साथी। सर्व अधिकार सुरक्षित।</p>
-            <p class="text-slate-400 text-[10px]">Note: Recommended Browsers: Chrome, Firefox, Edge | Best View: 1024x768</p>
         </div>
     </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function openPortal(url, name) {
+            const homeDashboard = document.getElementById('homeDashboard');
+            const iframe = document.getElementById('activePortalFrame');
+            const portalIndicator = document.getElementById('activePortalIndicator');
+            const portalNameSpan = document.getElementById('currentPortalName');
+
+            homeDashboard.style.display = 'none';
+            iframe.src = url;
+            iframe.classList.add('active');
+
+            portalNameSpan.innerText = name;
+            portalIndicator.classList.remove('hidden');
+            portalIndicator.classList.add('flex');
+        }
+
+        function showHome() {
+            const homeDashboard = document.getElementById('homeDashboard');
+            const iframe = document.getElementById('activePortalFrame');
+            const portalIndicator = document.getElementById('activePortalIndicator');
+
+            iframe.src = '';
+            iframe.classList.remove('active');
+            homeDashboard.style.display = 'block';
+
+            portalIndicator.classList.remove('flex');
+            portalIndicator.classList.add('hidden');
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>
