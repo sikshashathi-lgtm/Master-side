@@ -1,226 +1,370 @@
+
+
 <!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-</head>
-
-<body>
-  
-</body>
-
-</html><!DOCTYPE html>
 <html lang="ne">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>शिक्षा साथी - मास्टर एडमिन पोर्टल्स</title>
+    <title>शिक्षा साथी - एकीकृत पोर्टल | Sikshashathi Master Portal</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Mukta', sans-serif; background-color: #f4f6f9; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Fullscreen iframe container adjustments */
-        #portalViewer:fullscreen {
-            width: 100vw;
-            height: 100vh;
-            background: #fff;
-            padding: 0;
-            margin: 0;
-            border: none;
-            border-radius: 0;
-            display: flex;
-            flex-direction: column;
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#0f172a',
+                            indigo: '#1e1b4b',
+                            primary: '#1d4ed8',
+                            cyan: '#0284c7',
+                            sky: '#38bdf8',
+                            gold: '#f59e0b',
+                            goldHover: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
         }
-        #portalViewer:fullscreen iframe {
-            height: 100vh !important;
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Custom scrollbar for horizontal sub-nav */
+        .subnav-scroll::-webkit-scrollbar {
+            height: 5px;
+        }
+        .subnav-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .subnav-scroll::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        .subnav-scroll::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+
+        /* Smooth slide & fade transitions for top bar hiding */
+        #top-control-wrapper {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 200px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #top-control-wrapper.hidden-bar {
+            max-height: 0px !important;
+            opacity: 0;
+            transform: translateY(-100%);
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            overflow: hidden;
+        }
+
+        /* Floating Restore Button Animations */
+        #restore-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #restore-btn.visible-btn {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between text-slate-800 relative bg-slate-100">
+<body class="bg-slate-950 text-slate-100 h-screen w-screen flex flex-col justify-between select-none">
 
-    <!-- Top Red Header Bar -->
-    <div id="topRedBar" class="bg-red-700 text-white text-xs py-1 px-4 flex justify-between items-center border-b-2 border-yellow-400 transition-all duration-300">
-        <div class="flex items-center gap-2">
-            <i class="fa-solid fa-flag"></i>
-            <span class="font-bold">| शिक्षा साथी मास्टर एडमिन पोर्टल</span>
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="bg-yellow-400 text-red-900 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider">ADMIN PANEL MODE</span>
-            <span class="hidden sm:inline">shikhsyasathi</span>
-        </div>
+    <!-- Floating Top Restore Button (Visible when controls are hidden) -->
+    <div id="restore-btn" class="fixed top-2 left-1/2 -translate-x-1/2 z-50">
+        <button onclick="toggleTopControls()" 
+            title="कन्ट्रोल देखाउनुहोस् (Show Controls)"
+            class="group flex items-center gap-2 bg-gradient-to-r from-brand-indigo to-slate-900 border border-sky-500/40 text-sky-300 hover:text-white px-5 py-2 rounded-full shadow-2xl shadow-sky-500/30 backdrop-blur-md hover:border-sky-400 hover:scale-105 active:scale-95 transition-all duration-200">
+            <i class="fa-solid fa-eye text-amber-400 group-hover:rotate-12 transition-transform"></i>
+            <span class="text-xs font-semibold tracking-wide">कन्ट्रोल देखाउनुहोस्</span>
+            <i class="fa-solid fa-chevron-down text-xs text-sky-400 group-hover:translate-y-0.5 transition-transform"></i>
+        </button>
     </div>
 
-    <!-- Main Branding Header -->
-    <header id="mainHeader" class="bg-white shadow-md border-b-4 border-red-700 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
-            <div class="flex items-center gap-3 text-center md:text-left">
-                <div class="text-red-700 text-4xl">
-                    <i class="fa-solid fa-landmark-dome"></i>
+    <!-- Top Controls Wrapper (Header + SubNav) -->
+    <div id="top-control-wrapper" class="w-full flex-none z-40 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border-b border-slate-800 shadow-xl">
+        
+        <!-- Primary Header Bar -->
+        <header class="px-4 lg:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80">
+            
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center gap-3">
+                <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-600 to-amber-400 p-[2px] shadow-lg shadow-sky-500/20">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-sky-400">
+                        <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    </div>
                 </div>
                 <div>
-                    <h3 class="text-red-700 font-bold text-xs tracking-wide">आजको आवश्यकता प्रविधियुक्त गुणस्तरीय शिक्षा</h3>
-                    <h1 class="text-xl md:text-2xl font-extrabold text-blue-900 leading-tight">शिक्षा साथी (Shikshya Sathi)</h1>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base lg:text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-sky-200 to-sky-400 bg-clip-text text-transparent">
+                            शिक्षा साथी
+                        </h1>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 uppercase tracking-wider">
+                            एकीकृत पोर्टल
+                        </span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Sikshashathi Master Digital Management System</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2">
-                <button onclick="goHome()" class="bg-blue-900 hover:bg-blue-950 text-white text-xs font-bold px-3 py-1.5 rounded flex items-center gap-1.5 shadow transition">
-                    <i class="fa-solid fa-house"></i> गृहपृष्ठ
+            <!-- Primary Navigation Category Tabs -->
+            <nav class="flex items-center bg-slate-950/80 p-1 rounded-xl border border-slate-800 shadow-inner gap-1">
+                <button id="cat-btn-teacher" onclick="switchCategory('teacher')" 
+                    class="cat-tab flex items-center gap-2 px-4 py-1.5 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-200 bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-md shadow-sky-500/20 border border-sky-400/30">
+                    <i class="fa-solid fa-chalkboard-user text-amber-300"></i>
+                    <span>शिक्षक तथा दर्ता पोर्टल</span>
+                </button>
+                <button id="cat-btn-general" onclick="switchCategory('general')" 
+                    class="cat-tab flex items-center gap-2 px-4 py-1.5 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-900">
+                    <i class="fa-solid fa-cubes text-sky-400"></i>
+                    <span>सामान्य तथा अन्य सेवाहरू</span>
+                </button>
+            </nav>
+
+            <!-- Utility Controls Right -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <!-- Open in New Tab -->
+                <button onclick="openInNewTab()" 
+                    title="खोलिएको पेज नयाँ ट्याबमा खोल्नुहोस् (Open in New Tab)"
+                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/90 border border-slate-700/80 text-slate-300 hover:text-sky-300 text-xs font-medium transition-all active:scale-95">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-sky-400"></i>
+                    <span class="hidden md:inline">नयाँ ट्याबमा खोल्नुहोस्</span>
+                </button>
+
+                <!-- Hide Top Bar / Controls -->
+                <button onclick="toggleTopControls()" 
+                    title="कन्ट्रोल लुकाउनुहोस् (Hide Controls)"
+                    class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/90 border border-slate-700/80 text-slate-300 hover:text-amber-300 text-xs font-medium transition-all active:scale-95">
+                    <i class="fa-solid fa-eye-slash text-amber-400"></i>
+                    <span class="hidden md:inline">कन्ट्रोल लुकाउनुहोस्</span>
+                </button>
+
+                <!-- Fullscreen Toggle -->
+                <button id="fullscreen-btn" onclick="toggleFullscreen()" 
+                    title="फुलस्क्रिन (Fullscreen)"
+                    class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800/80 hover:bg-sky-600/30 border border-slate-700/80 hover:border-sky-500/50 text-slate-300 hover:text-white text-xs transition-all active:scale-95">
+                    <i class="fa-solid fa-expand text-sky-400"></i>
                 </button>
             </div>
-        </div>
-        
-        <!-- Top Scrollable Nav Control Div -->
-        <nav class="bg-blue-900 text-white text-xs font-semibold border-t border-blue-800">
-            <div class="max-w-7xl mx-auto px-2 flex items-center gap-2 overflow-x-auto py-2 no-scrollbar whitespace-nowrap">
-                <button onclick="goHome()" class="bg-red-700 hover:bg-red-800 px-3 py-1.5 rounded-lg flex items-center gap-1 shrink-0 text-white font-bold shadow">
-                    <i class="fa-solid fa-cubes"></i> कन्ट्रोल प्यानल
+        </header>
+
+        <!-- Secondary Horizontal Pill Sub-Navigation (Laptop Optimized) -->
+        <nav class="bg-slate-950/70 px-4 lg:px-6 py-2 border-t border-slate-900">
+            
+            <!-- Category 1: Teacher & Registration Links -->
+            <div id="subnav-teacher" class="subnav-group subnav-scroll flex items-center gap-2 overflow-x-auto whitespace-nowrap py-0.5">
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Docdarta/', this)" 
+                    class="sub-tab text-xs font-semibold px-3.5 py-1.5 rounded-full border border-sky-500/60 bg-sky-500/15 text-sky-200 transition-all duration-150 flex items-center gap-2 shadow-sm shadow-sky-500/20">
+                    <i class="fa-solid fa-file-pdf text-red-400"></i> Teacher PDF Portal
                 </button>
-                <span class="text-blue-700">|</span>
-                
-                <!-- 15 Portals Quick Links -->
-                <button onclick="loadPortal('मुख्य वेबसाइट', 'https://sikshashathi-lgtm.github.io/Final/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-globe text-yellow-300"></i> मुख्य वेबसाइट</button>
-                <button onclick="loadPortal('शिक्षक PDF पोर्टल', 'https://sikshashathi-lgtm.github.io/Docdarta/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-file-pdf text-yellow-300"></i> शिक्षक PDF</button>
-                <button onclick="loadPortal('शिक्षक डकुमेन्ट (Doctea)', 'https://sikshashathi-lgtm.github.io/Doctea/')" class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition text-yellow-300 font-bold"><i class="fa-solid fa-file-lines"></i> Doctea (नयाँ)</button>
-                <button onclick="loadPortal('रिक्ति सूचना', 'https://sikshashathi-lgtm.github.io/Vacancy/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-bullhorn text-yellow-300"></i> रिक्ति सूचना</button>
-                <button onclick="loadPortal('अभिभावक जानकारी', 'https://sikshashathi-lgtm.github.io/Parents-info/-/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-users text-yellow-300"></i> अभिभावक</button>
-                <button onclick="loadPortal('तलब तथा समय', 'https://sikshashathi-lgtm.github.io/Parents-data-long/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-money-check-dollar text-yellow-300"></i> तलब/समय</button>
-                <button onclick="loadPortal('शिक्षक खोज', 'https://sikshashathi-lgtm.github.io/Teacher-finder/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-magnifying-glass text-yellow-300"></i> शिक्षक खोज</button>
-                <button onclick="loadPortal('भ्याकेन्सी दर्ता', 'https://sikshashathi-lgtm.github.io/Vacancydarta1/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-file-signature text-yellow-300"></i> भ्याकेन्सी दर्ता</button>
-                <button onclick="loadPortal('परीक्षा नतिजा', 'https://sikshashathi-lgtm.github.io/Result/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-square-poll-vertical text-yellow-300"></i> नतिजा</button>
-                <button onclick="loadPortal('कारोबार पोर्टल', 'https://sikshashathi-lgtm.github.io/Karobar/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-briefcase text-yellow-300"></i> कारोबार</button>
-                <button onclick="loadPortal('शिक्षक नक्सा दर्ता', 'https://sikshashathi-lgtm.github.io/Dartavoucher/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-map-location-dot text-yellow-300"></i> नक्सा दर्ता</button>
-                <button onclick="loadPortal('शिक्षक विवरण नक्सा', 'https://sikshashathi-lgtm.github.io/Mapteacher/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-map text-yellow-300"></i> विवरण नक्सा</button>
-                <button onclick="loadPortal('मास्टर शिक्षक दर्ता', 'https://sikshashathi-lgtm.github.io/Dartamapshort/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-id-card-clip text-yellow-300"></i> मास्टर दर्ता</button>
-                <button onclick="loadPortal('स्वीकृत पोर्टल', 'https://sikshashathi-lgtm.github.io/Approved/')" class="bg-blue-800/80 hover:bg-blue-700 px-3 py-1.5 rounded flex items-center gap-1.5 shrink-0 transition"><i class="fa-solid fa-clipboard-check text-yellow-300"></i> स्वीकृत</button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Teacher-finder/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass text-sky-400"></i> Teacher Finder
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Dartavoucher/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Teacher Map Darta (Full)
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Mapteacher/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-rose-400"></i> Teacher Bibarad Map
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Dartamapshort/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-id-card text-amber-400"></i> Master Teacher Darta
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Dartatech/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-user-check text-cyan-400"></i> Teacher Profile Check
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Approved/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-green-400"></i> Approved Portal
+                </button>
+            </div>
+
+            <!-- Category 2: General & Other Services Links -->
+            <div id="subnav-general" class="subnav-group subnav-scroll hidden flex items-center gap-2 overflow-x-auto whitespace-nowrap py-0.5">
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Final/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-house text-indigo-400"></i> Main Website
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Vacancy/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-bullhorn text-amber-400"></i> Vacancy Announcement
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Vacancydarta1/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-folder-plus text-sky-400"></i> Add Vacancy
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Parents-info/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-file-arrow-down text-teal-400"></i> Parents Info Downloader
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Parents-data-long/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> Salary Time Portal
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Result/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-square-poll-vertical text-emerald-400"></i> Result Portal
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Karobar/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-rose-400"></i> कारोबार (Karobar)
+                </button>
             </div>
         </nav>
-    </header>
+    </div>
 
-    <!-- Main Dynamic Viewer Area -->
-    <main class="max-w-7xl mx-auto px-2 md:px-4 py-4 w-full flex-grow flex flex-col">
+    <!-- Main Workspace Container (Full Frame Viewport) -->
+    <main class="flex-1 w-full h-full relative bg-slate-950 overflow-hidden">
         
-        <!-- Welcome Dashboard (Visible by default) -->
-        <div id="homeDashboard" class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 text-center my-auto py-12">
-            <div class="max-w-md mx-auto space-y-4">
-                <div class="w-16 h-16 bg-blue-50 text-blue-900 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
-                    <i class="fa-solid fa-laptop-code"></i>
-                </div>
-                <h2 class="text-xl font-extrabold text-blue-900">माथिको नेभिगेसन कन्ट्रोल डिभ (Top Div) बाट पोर्टल छान्नुहोस्</h2>
-                <p class="text-xs text-slate-500 font-semibold leading-relaxed">
-                    तपाईंले माथि निलो रङको पट्टीमा देखिरहनुभएको बटनहरूमा क्लिक गरेर एउटै स्क्रिनबाट स्मूथ तरिकाले सबै पोर्टलहरू फुल-स्क्रिनमा चलाउन सक्नुहुन्छ।
-                </p>
-                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-xs text-amber-900 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-circle-info text-amber-600"></i>
-                    <span>कुनै पनि पोर्टल खोलेपछि त्यसको हेडरमा भएको फुल-स्क्रिन बटन प्रयोग गर्नुहोस्!</span>
-                </div>
+        <!-- Loading Overlay -->
+        <div id="loading-spinner" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center z-20 opacity-100 pointer-events-none transition-opacity duration-300">
+            <div class="relative flex items-center justify-center">
+                <div class="w-12 h-12 border-4 border-sky-500/20 border-t-sky-400 rounded-full animate-spin"></div>
+                <i class="fa-solid fa-graduation-cap absolute text-sky-400 text-xs"></i>
             </div>
+            <p class="text-xs text-slate-300 font-medium mt-3 tracking-wide">वेबपेज लोड हुँदैछ...</p>
         </div>
 
-        <!-- Single Page Active Viewer Container (Hidden initially) -->
-        <div id="portalViewer" class="hidden flex-col flex-grow bg-white rounded-xl shadow-lg border-2 border-red-700 overflow-hidden min-h-[75vh]">
-            <!-- Portal Header Control Bar -->
-            <div class="bg-blue-900 text-white px-4 py-2 flex justify-between items-center border-b-2 border-yellow-400">
-                <div class="flex items-center gap-2 truncate">
-                    <span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
-                    <span id="activePortalTitle" class="font-bold text-xs md:text-sm truncate">पोर्टलको नाम</span>
-                </div>
-                <div class="flex items-center gap-2 shrink-0">
-                    <a id="externalLinkBtn" href="#" target="_blank" class="bg-blue-700 hover:bg-blue-800 text-white font-bold px-2.5 py-1 rounded text-xs transition flex items-center gap-1 shadow" title="नयाँ ट्याबमा खोल्नुहोस्">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> <span class="hidden sm:inline">Open in New Tab</span>
-                    </a>
-                    <button onclick="toggleViewerFullScreen()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-2.5 py-1 rounded text-xs transition flex items-center gap-1 shadow" title="फुल स्क्रिन मोड">
-                        <i class="fa-solid fa-expand" id="viewerFsIcon"></i> <span class="hidden sm:inline" id="viewerFsText">Full Screen</span>
-                    </button>
-                    <button onclick="goHome()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-2 py-1 rounded text-xs transition" title="बन्द गर्नुहोस्">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            </div>
-            <!-- Dynamic Iframe Frame -->
-            <iframe id="mainIframe" src="" class="w-full flex-grow border-0 min-h-[70vh]"></iframe>
-        </div>
-
+        <!-- Portal Viewer iFrame -->
+        <iframe id="main-frame" 
+            src="https://sikshashathi-lgtm.github.io/Docdarta/" 
+            class="w-full h-full border-none bg-white"
+            onload="hideSpinner()">
+        </iframe>
     </main>
 
-    <!-- Footer -->
-    <footer id="mainFooter" class="bg-blue-950 text-white border-t-4 border-red-700 mt-6 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 py-4 text-center text-xs space-y-1">
-            <p class="font-bold text-yellow-400">शिक्षा साथी - एकीकृत मास्टर व्यवस्थापन प्रणाली</p>
-            <p class="text-slate-400 text-[10px]">© २०८२ शिक्षा साथी। Full Screen Portal Engine.</p>
-        </div>
-    </footer>
-
-    <!-- Interactive Script -->
+    <!-- JavaScript Navigation & Interactive Handlers -->
     <script>
-        let currentPortalData = { name: '', url: '' };
+        let currentPortalUrl = "https://sikshashathi-lgtm.github.io/Docdarta/";
 
-        function loadPortal(name, url) {
-            currentPortalData = { name, url };
-            
-            document.getElementById('homeDashboard').classList.add('hidden');
-            document.getElementById('portalViewer').classList.remove('hidden');
-            document.getElementById('portalViewer').classList.add('flex');
+        // Switch Top Category Tabs
+        function switchCategory(category) {
+            const btnTeacher = document.getElementById('cat-btn-teacher');
+            const btnGeneral = document.getElementById('cat-btn-general');
+            const subTeacher = document.getElementById('subnav-teacher');
+            const subGeneral = document.getElementById('subnav-general');
 
-            document.getElementById('activePortalTitle').innerText = name;
-            document.getElementById('mainIframe').src = url;
-            document.getElementById('externalLinkBtn').href = url;
-        }
+            if (category === 'teacher') {
+                btnTeacher.className = "cat-tab flex items-center gap-2 px-4 py-1.5 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-200 bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-md shadow-sky-500/20 border border-sky-400/30";
+                btnGeneral.className = "cat-tab flex items-center gap-2 px-4 py-1.5 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-900";
+                
+                subTeacher.classList.remove('hidden');
+                subGeneral.classList.add('hidden');
 
-        function goHome() {
-            // Exit fullscreen if active
-            if (document.fullscreenElement) {
-                document.exitFullscreen().catch(err => {});
+                const firstSubBtn = subTeacher.querySelector('button');
+                if (firstSubBtn) firstSubBtn.click();
+            } else {
+                btnGeneral.className = "cat-tab flex items-center gap-2 px-4 py-1.5 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-200 bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-md shadow-sky-500/20 border border-sky-400/30";
+                btnTeacher.className = "cat-tab flex items-center gap-2 px-4 py-1.5 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-900";
+                
+                subGeneral.classList.remove('hidden');
+                subTeacher.classList.add('hidden');
+
+                const firstSubBtn = subGeneral.querySelector('button');
+                if (firstSubBtn) firstSubBtn.click();
             }
-            document.getElementById('portalViewer').classList.add('hidden');
-            document.getElementById('portalViewer').classList.remove('flex');
-            document.getElementById('homeDashboard').classList.remove('hidden');
-            document.getElementById('mainIframe').src = '';
-            
-            // Show top bars again if they were hidden
-            document.getElementById('topRedBar').classList.remove('hidden');
-            document.getElementById('mainHeader').classList.remove('hidden');
-            document.getElementById('mainFooter').classList.remove('hidden');
         }
 
-        function toggleViewerFullScreen() {
-            const viewer = document.getElementById('portalViewer');
-            
+        // Load Portal URL into iframe
+        function loadPortal(url, element) {
+            currentPortalUrl = url;
+            showSpinner();
+            document.getElementById('main-frame').src = url;
+
+            // Reset sub-tab styling
+            document.querySelectorAll('.sub-tab').forEach(btn => {
+                btn.className = "sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2";
+            });
+
+            // Set active pill highlight
+            element.className = "sub-tab text-xs font-semibold px-3.5 py-1.5 rounded-full border border-sky-500/60 bg-sky-500/15 text-sky-200 transition-all duration-150 flex items-center gap-2 shadow-sm shadow-sky-500/20";
+        }
+
+        // Open current page in a new browser tab
+        function openInNewTab() {
+            window.open(currentPortalUrl, '_blank');
+        }
+
+        // Toggle Top Controls / Header visibility
+        function toggleTopControls() {
+            const wrapper = document.getElementById('top-control-wrapper');
+            const restoreBtn = document.getElementById('restore-btn');
+
+            if (wrapper.classList.contains('hidden-bar')) {
+                wrapper.classList.remove('hidden-bar');
+                restoreBtn.classList.remove('visible-btn');
+            } else {
+                wrapper.classList.add('hidden-bar');
+                restoreBtn.classList.add('visible-btn');
+            }
+        }
+
+        // Toggle Fullscreen mode
+        function toggleFullscreen() {
+            const fsBtnIcon = document.querySelector('#fullscreen-btn i');
             if (!document.fullscreenElement) {
-                viewer.requestFullscreen().then(() => {
-                    document.getElementById('viewerFsIcon').className = "fa-solid fa-compress";
-                    document.getElementById('viewerFsText').innerText = "Exit Full";
-                    
-                    // Hide top bars completely so they don't disturb work
-                    document.getElementById('topRedBar').classList.add('hidden');
-                    document.getElementById('mainHeader').classList.add('hidden');
-                    document.getElementById('mainFooter').classList.add('hidden');
-                }).catch(err => {});
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                if (fsBtnIcon) fsBtnIcon.className = "fa-solid fa-compress text-amber-400";
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
                 }
+                if (fsBtnIcon) fsBtnIcon.className = "fa-solid fa-expand text-sky-400";
             }
         }
 
-        // Listen to fullscreen changes (e.g. user pressing ESC key)
+        // Sync Fullscreen icon on escape/exit
         document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                document.getElementById('viewerFsIcon').className = "fa-solid fa-expand";
-                document.getElementById('viewerFsText').innerText = "Full Screen";
-                
-                // Bring back top bars
-                document.getElementById('topRedBar').classList.remove('hidden');
-                document.getElementById('mainHeader').classList.remove('hidden');
-                document.getElementById('mainFooter').classList.remove('hidden');
+            const fsBtnIcon = document.querySelector('#fullscreen-btn i');
+            if (fsBtnIcon) {
+                if (document.fullscreenElement) {
+                    fsBtnIcon.className = "fa-solid fa-compress text-amber-400";
+                } else {
+                    fsBtnIcon.className = "fa-solid fa-expand text-sky-400";
+                }
             }
         });
+
+        // Loading spinner controls
+        function showSpinner() {
+            const spinner = document.getElementById('loading-spinner');
+            spinner.style.opacity = '1';
+            spinner.style.pointerEvents = 'auto';
+        }
+
+        function hideSpinner() {
+            const spinner = document.getElementById('loading-spinner');
+            spinner.style.opacity = '0';
+            spinner.style.pointerEvents = 'none';
+        }
     </script>
 </body>
 </html>
+```
