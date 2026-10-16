@@ -1,5 +1,8 @@
 
 
+
+
+
 <!DOCTYPE html>
 <html lang="ne">
 <head>
@@ -138,7 +141,7 @@
                 <button id="cat-btn-general" onclick="switchCategory('general')" 
                     class="cat-tab flex items-center gap-2 px-4 py-1.5 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-900">
                     <i class="fa-solid fa-cubes text-sky-400"></i>
-                    <span>सामान्य तथा अन्य सेवाहरू</span>
+                    <span>सामान्य / अभिभावक / प्रशासन पोर्टल</span>
                 </button>
             </nav>
 
@@ -162,7 +165,7 @@
 
                 <!-- Fullscreen Toggle -->
                 <button id="fullscreen-btn" onclick="toggleFullscreen()" 
-                    title="फुलस्क्रिन (Fullscreen)"
+                    title="पूर्ण स्क्रिन (Fullscreen)"
                     class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800/80 hover:bg-sky-600/30 border border-slate-700/80 hover:border-sky-500/50 text-slate-300 hover:text-white text-xs transition-all active:scale-95">
                     <i class="fa-solid fa-expand text-sky-400"></i>
                 </button>
@@ -177,6 +180,10 @@
                 <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Docdarta/', this)" 
                     class="sub-tab text-xs font-semibold px-3.5 py-1.5 rounded-full border border-sky-500/60 bg-sky-500/15 text-sky-200 transition-all duration-150 flex items-center gap-2 shadow-sm shadow-sky-500/20">
                     <i class="fa-solid fa-file-pdf text-red-400"></i> Teacher PDF Portal
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Doctea/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-brands fa-chrome text-amber-400"></i> PDF Chrome
                 </button>
                 <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Teacher-finder/', this)" 
                     class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
@@ -194,13 +201,13 @@
                     class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
                     <i class="fa-solid fa-id-card text-amber-400"></i> Master Teacher Darta
                 </button>
-                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Dartatech/', this)" 
-                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
-                    <i class="fa-solid fa-user-check text-cyan-400"></i> Teacher Profile Check
-                </button>
                 <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Approved/', this)" 
                     class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
                     <i class="fa-solid fa-circle-check text-green-400"></i> Approved Portal
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Dartatech/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-user-check text-cyan-400"></i> Teacher Profile Check
                 </button>
             </div>
 
@@ -209,6 +216,10 @@
                 <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Final/', this)" 
                     class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
                     <i class="fa-solid fa-house text-indigo-400"></i> Main Website
+                </button>
+                <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/admin-dash-2/', this)" 
+                    class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-purple-400"></i> Admin 2
                 </button>
                 <button onclick="loadPortal('https://sikshashathi-lgtm.github.io/Vacancy/', this)" 
                     class="sub-tab text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80 hover:text-sky-300 transition-all duration-150 flex items-center gap-2">
